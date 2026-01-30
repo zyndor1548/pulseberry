@@ -1,12 +1,39 @@
+.wrapper {
+  padding: 2rem 2rem 2rem calc(240px + 2rem);
+  max-width: 1400px;
+}
+
+.header {
+  margin-bottom: 2rem;
+}
+
+.title {
+  font-size: 1.75rem;
+  font-weight: 700;
+  color: #0e0e0e;
+  margin: 0 0 0.5rem 2em;
+  letter-spacing: -0.02em;
+}
+
+.subtitle {
+  font-size: 0.95rem;
+  color: #555;
+  margin: 0;
+  line-height: 1.5;
+}
+
 .grid {
   display: grid;
   grid-template-columns: repeat(3, 1fr);
-  gap: 2rem;
-  padding-left: 20rem;
-  padding-top: 3rem;
+  gap: 1rem;
+  padding: 3rem;
+  padding-top: 0;
 }
 
 @media (max-width: 1024px) {
+  .wrapper {
+    padding-left: 2rem;
+  }
   .grid {
     grid-template-columns: repeat(2, 1fr);
   }
