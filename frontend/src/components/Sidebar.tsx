@@ -16,7 +16,16 @@ const Sidebar: React.FC = () => {
             `${styles.navItem} ${isActive ? styles.active : ""}`
           }
         >
-          Home
+          Dashboard
+        </NavLink>
+
+        <NavLink
+          to="/payment"
+          className={({ isActive }) =>
+            `${styles.navItem} ${isActive ? styles.active : ""}`
+          }
+        >
+          Payment
         </NavLink>
 
         <NavLink

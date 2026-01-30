@@ -1,6 +1,7 @@
 import Sidebar from "../../components/Sidebar";
 import { Routes, Route } from "react-router-dom";
 import Home from "../../pages/Home";
+import Payment from "../../pages/Payment";
 import styles from "./Dashboard.module.css";
 
 const Dashboard: React.FC = () => {
@@ -11,6 +12,7 @@ const Dashboard: React.FC = () => {
       <main className={styles.content}>
         <Routes>
           <Route path="/" element={<Home />} />
+          <Route path="/payment" element={<Payment />} />
         </Routes>
       </main>
     </div>
