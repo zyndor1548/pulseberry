@@ -22,6 +22,17 @@
   line-height: 1.5;
 }
 
+.message {
+  color: #666;
+}
+
+.error {
+  color: #c5221f;
+  padding-left: 3.5rem;
+  border-radius: 8px;
+  max-width: 32rem;
+}
+
 .grid {
   display: grid;
   grid-template-columns: repeat(3, 1fr);
