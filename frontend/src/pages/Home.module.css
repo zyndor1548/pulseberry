@@ -1,0 +1,87 @@
+.wrapper {
+  padding: 2rem 2rem 2rem calc(240px + 2rem);
+  max-width: 1400px;
+}
+
+.header {
+  margin-bottom: 2rem;
+}
+
+.title {
+  font-size: 1.75rem;
+  font-weight: 700;
+  color: #0e0e0e;
+  margin: 0 0 0 5rem;
+  letter-spacing: -0.02em;
+}
+
+.subtitle {
+  font-size: 0.95rem;
+  color: #555;
+  margin: 0;
+  line-height: 1.5;
+}
+
+.message {
+  color: #666;
+}
+
+.error {
+  color: #c5221f;
+  padding-left: 3.5rem;
+  border-radius: 8px;
+  max-width: 32rem;
+}
+
+.grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 1rem;
+  padding: 5rem;
+  padding-top: 0;
+}
+
+.message{
+  padding-left: 4rem;
+}
+
+@media (max-width: 1024px) {
+  .wrapper {
+    padding-left: 2rem;
+  }
+  .grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+.chartSection {
+  padding: 2rem 3rem 3rem;
+  margin-top: 2rem;
+  background: #fafafa;
+  border-radius: 12px;
+  border: 1px solid #eee;
+}
+
+.sectionTitle {
+  font-size: 1.35rem;
+  font-weight: 700;
+  color: #0e0e0e;
+  margin: 0 0 0.35rem 0;
+  letter-spacing: -0.02em;
+}
+
+.sectionSubtitle {
+  font-size: 0.9rem;
+  color: #555;
+  margin: 0 0 1.5rem 0;
+  line-height: 1.4;
+}
+
+@media (max-width: 640px) {
+  .grid {
+    grid-template-columns: 1fr;
+  }
+  .chartSection {
+    padding: 1rem;
+  }
+}

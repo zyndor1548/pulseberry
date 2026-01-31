@@ -1,0 +1,121 @@
+.card {
+  border-radius: 18px;
+  padding: 18px;
+  padding-top: 0;
+  color: #000000;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
+  border-left: 6px solid transparent;
+  width: 15rem;
+}
+
+.header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 1rem;
+}
+
+.header h3 {
+  font-size: 18px;
+  font-weight: 600;
+}
+
+.statusBadge {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 11px;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+}
+
+.statusDot {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  flex-shrink: 0;
+}
+
+.metrics {
+  display: flex;
+  justify-content: space-between;
+  text-align: center;
+}
+
+.label {
+  font-size: 12px;
+  color: grey;
+}
+
+.value {
+  font-size: 18px;
+  font-weight: 600;
+  margin-top: 4px;
+  display: block;
+}
+
+.healthy {
+  border-color: #06782e;
+}
+
+.healthy .statusDot {
+  background: #06782e;
+}
+
+.degraded {
+  border-color: #ffcc00;
+}
+
+.degraded .statusDot {
+  background: #ffcc00;
+}
+
+.down {
+  border-color: #ff4d4f;
+}
+
+.down .statusDot {
+  background: #ff4d4f;
+}
+
+.off {
+  opacity: 0.7;
+}
+
+.actions {
+  display: flex;
+  gap: 8px;
+  margin-top: 1rem;
+  padding-top: 1rem;
+  border-top: 1px solid rgba(0, 0, 0, 0.1);
+}
+
+.toggleBtn {
+  flex: 1;
+  padding: 8px 12px;
+  font-size: 13px;
+  font-weight: 600;
+  border-radius: 10px;
+  border: 2px solid #e5e7eb;
+  background: #f9fafb;
+  color: #6b7280;
+  cursor: pointer;
+  transition: background 0.2s, border-color 0.2s, color 0.2s;
+}
+
+.toggleBtn:hover {
+  background: #f3f4f6;
+  border-color: #d1d5db;
+}
+
+.toggleBtnActive {
+  background: #06782e;
+  border-color: #06782e;
+  color: #fff;
+}
+
+.toggleBtnActive:hover {
+  background: #056827;
+  border-color: #056827;
+}

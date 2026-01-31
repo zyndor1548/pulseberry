@@ -1,0 +1,9 @@
+.layout {
+  display: flex;
+}
+
+.content {
+  flex: 1;
+  min-height: 100vh;
+  background-color: #f7f7f5;
+}

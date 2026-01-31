@@ -1,0 +1,151 @@
+.wrapper {
+  padding: 2rem 2rem 2rem calc(240px + 6rem);
+  max-width: 1200px;
+}
+
+.header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 1rem;
+  margin-bottom: 1.5rem;
+}
+
+.title {
+  font-size: 1.75rem;
+  font-weight: 700;
+  color: #0e0e0e;
+  margin: 0 0 0.5rem 0;
+  letter-spacing: -0.02em;
+}
+
+.subtitle {
+  font-size: 0.95rem;
+  color: #555;
+  margin: 0;
+  line-height: 1.5;
+}
+
+.exportBtn {
+  padding: 0.5rem 1rem;
+  font-size: 0.9rem;
+  font-weight: 600;
+  border-radius: 8px;
+  border: 2px solid #06782e;
+  background: #06782e;
+  color: #fff;
+  cursor: pointer;
+  transition: background 0.2s, color 0.2s;
+}
+
+.exportBtn:hover {
+  background: #056827;
+}
+
+.message,
+.messageError {
+  padding: 1rem;
+  border-radius: 8px;
+  margin: 0;
+}
+
+.message {
+  color: #555;
+  background: #f8f8f8;
+}
+
+.messageError {
+  color: #c5221f;
+  background: #fce8e6;
+}
+
+.empty {
+  text-align: center;
+  color: #666;
+  padding: 2rem !important;
+}
+
+.tableWrap {
+  background: #fff;
+  border-radius: 12px;
+  box-shadow: 0 2px 12px rgba(0, 0, 0, 0.06);
+  border: 1px solid rgba(0, 0, 0, 0.06);
+  overflow: hidden;
+}
+
+.table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 0.9rem;
+}
+
+.table th {
+  text-align: left;
+  padding: 0.875rem 1rem;
+  font-weight: 600;
+  color: #333;
+  background: #f8f8f8;
+  border-bottom: 1px solid #eee;
+}
+
+.table td {
+  padding: 0.75rem 1rem;
+  border-bottom: 1px solid #f0f0f0;
+  color: #0e0e0e;
+}
+
+.table tbody tr:last-child td {
+  border-bottom: none;
+}
+
+.table tbody tr:hover {
+  background: #fafafa;
+}
+
+.id {
+  font-family: ui-monospace, monospace;
+  font-size: 0.85rem;
+}
+
+.timestamp {
+  color: #666;
+  font-size: 0.85rem;
+}
+
+.status {
+  display: inline-block;
+  padding: 0.25rem 0.5rem;
+  border-radius: 6px;
+  font-size: 0.8rem;
+  font-weight: 600;
+}
+
+.status.success {
+  background: #e6f4ea;
+  color: #0e8c4a;
+}
+
+.status.failed {
+  background: #fce8e6;
+  color: #c5221f;
+}
+
+.status.retracked {
+  background: #fef7e0;
+  color: #b45309;
+}
+
+@media (max-width: 1024px) {
+  .wrapper {
+    padding-left: 2rem;
+  }
+
+  .tableWrap {
+    overflow-x: auto;
+  }
+
+  .table {
+    min-width: 600px;
+  }
+}
