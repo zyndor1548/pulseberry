@@ -50,8 +50,34 @@
   }
 }
 
+.chartSection {
+  padding: 2rem 3rem 3rem;
+  margin-top: 2rem;
+  background: #fafafa;
+  border-radius: 12px;
+  border: 1px solid #eee;
+}
+
+.sectionTitle {
+  font-size: 1.35rem;
+  font-weight: 700;
+  color: #0e0e0e;
+  margin: 0 0 0.35rem 0;
+  letter-spacing: -0.02em;
+}
+
+.sectionSubtitle {
+  font-size: 0.9rem;
+  color: #555;
+  margin: 0 0 1.5rem 0;
+  line-height: 1.4;
+}
+
 @media (max-width: 640px) {
   .grid {
     grid-template-columns: 1fr;
+  }
+  .chartSection {
+    padding: 1rem;
   }
 }
