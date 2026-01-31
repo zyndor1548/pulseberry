@@ -8,7 +8,6 @@ import (
 	"time"
 )
 
-// ServerPool manages multiple payment gateway servers with health scoring
 type ServerPool struct {
 	servers      map[string]*ServerMetrics
 	config       *ScoringConfig
@@ -18,7 +17,6 @@ type ServerPool struct {
 	isRunning    bool
 }
 
-// NewServerPool creates a new server pool with the given configuration
 func NewServerPool(config *ScoringConfig) *ServerPool {
 	if config == nil {
 		config = DefaultScoringConfig()
@@ -31,7 +29,6 @@ func NewServerPool(config *ScoringConfig) *ServerPool {
 	}
 }
 
-// AddServer adds a new server to the pool
 func (sp *ServerPool) AddServer(serverURL string) {
 	sp.mu.Lock()
 	defer sp.mu.Unlock()
@@ -42,7 +39,6 @@ func (sp *ServerPool) AddServer(serverURL string) {
 	}
 }
 
-// RemoveServer removes a server from the pool
 func (sp *ServerPool) RemoveServer(serverURL string) {
 	sp.mu.Lock()
 	defer sp.mu.Unlock()
@@ -53,7 +49,6 @@ func (sp *ServerPool) RemoveServer(serverURL string) {
 	}
 }
 
-// GetServer returns the metrics for a specific server
 func (sp *ServerPool) GetServer(serverURL string) (*ServerMetrics, error) {
 	sp.mu.RLock()
 	defer sp.mu.RUnlock()
@@ -65,7 +60,6 @@ func (sp *ServerPool) GetServer(serverURL string) (*ServerMetrics, error) {
 	return server, nil
 }
 
-// SelectServer selects a server using weighted random selection based on scores
 func (sp *ServerPool) SelectServer() (*ServerMetrics, error) {
 	sp.mu.RLock()
 	defer sp.mu.RUnlock()
@@ -74,30 +68,25 @@ func (sp *ServerPool) SelectServer() (*ServerMetrics, error) {
 		return nil, errors.New("no servers available")
 	}
 
-	// Calculate total score
 	totalScore := 0.0
 	serverList := make([]*ServerMetrics, 0, len(sp.servers))
 
 	for _, server := range sp.servers {
 		score := server.GetScore()
-		// Only consider servers with score > 0
 		if score > 0 {
 			totalScore += score
 			serverList = append(serverList, server)
 		}
 	}
 
-	// If all servers have score 0, fall back to random selection
 	if totalScore == 0 || len(serverList) == 0 {
 		log.Println("Warning: All servers have score 0, using fallback selection")
-		// Get any server
 		for _, server := range sp.servers {
 			return server, nil
 		}
 		return nil, errors.New("no healthy servers available")
 	}
 
-	// Weighted random selection
 	randomValue := rand.Float64() * totalScore
 	currentSum := 0.0
 
@@ -107,13 +96,10 @@ func (sp *ServerPool) SelectServer() (*ServerMetrics, error) {
 			return server, nil
 		}
 	}
-
-	// Fallback (should not reach here)
 	return serverList[0], nil
 }
 
-// RecordRequestResult records the result of a request to a specific server
-func (sp *ServerPool) RecordRequestResult(serverURL string, latency time.Duration, success bool, errorType *ErrorType, errorMsg string) {
+func (sp *ServerPool) RecordRequestResult(paymentID, serverURL string, latency time.Duration, success bool, errorType *ErrorType, errorMsg string) {
 	server, err := sp.GetServer(serverURL)
 	if err != nil {
 		log.Printf("Error recording request result: %v", err)
@@ -125,9 +111,29 @@ func (sp *ServerPool) RecordRequestResult(serverURL string, latency time.Duratio
 	if !success && errorType != nil {
 		server.RecordError(*errorType, errorMsg)
 	}
+
+	currentScore := server.GetScore()
+
+	errorTypeStr := ""
+	if errorType != nil {
+		switch *errorType {
+		case ErrorTypeGateway:
+			errorTypeStr = "GATEWAY"
+		case ErrorTypeBank:
+			errorTypeStr = "BANK"
+		case ErrorTypeNetwork:
+			errorTypeStr = "NETWORK"
+		case ErrorTypeClient:
+			errorTypeStr = "CLIENT"
+		}
+	}
+
+	latencyMs := latency.Milliseconds()
+	if err := LogRequestMetrics(paymentID, serverURL, latencyMs, success, currentScore, errorTypeStr, errorMsg); err != nil {
+		log.Printf("Failed to log request metrics to database: %v", err)
+	}
 }
 
-// StartPeriodicScoreUpdate starts the periodic score recalculation
 func (sp *ServerPool) StartPeriodicScoreUpdate() {
 	sp.mu.Lock()
 	if sp.isRunning {
@@ -139,7 +145,7 @@ func (sp *ServerPool) StartPeriodicScoreUpdate() {
 	sp.mu.Unlock()
 
 	go func() {
-		log.Printf("Started periodic score updates (interval: %v)", sp.config.ScoreUpdatePeriod)
+		log.Printf("score update interval: %v", sp.config.ScoreUpdatePeriod)
 		for {
 			select {
 			case <-sp.updateTicker.C:
@@ -153,7 +159,6 @@ func (sp *ServerPool) StartPeriodicScoreUpdate() {
 	}()
 }
 
-// StopPeriodicScoreUpdate stops the periodic score recalculation
 func (sp *ServerPool) StopPeriodicScoreUpdate() {
 	sp.mu.Lock()
 	defer sp.mu.Unlock()
@@ -163,13 +168,10 @@ func (sp *ServerPool) StopPeriodicScoreUpdate() {
 		sp.isRunning = false
 	}
 }
-
-// updateAllScores recalculates scores for all servers
 func (sp *ServerPool) updateAllScores() {
 	sp.mu.RLock()
 	defer sp.mu.RUnlock()
 
-	log.Println("=== Updating server scores ===")
 	for _, server := range sp.servers {
 		oldScore := server.GetScore()
 		server.CalculateScore(sp.config)
@@ -181,7 +183,6 @@ func (sp *ServerPool) updateAllScores() {
 	}
 }
 
-// GetAllServersStatus returns status of all servers
 func (sp *ServerPool) GetAllServersStatus() []map[string]interface{} {
 	sp.mu.RLock()
 	defer sp.mu.RUnlock()
@@ -193,7 +194,6 @@ func (sp *ServerPool) GetAllServersStatus() []map[string]interface{} {
 	return status
 }
 
-// GetBestServer returns the server with the highest score
 func (sp *ServerPool) GetBestServer() (*ServerMetrics, error) {
 	sp.mu.RLock()
 	defer sp.mu.RUnlock()
@@ -220,7 +220,6 @@ func (sp *ServerPool) GetBestServer() (*ServerMetrics, error) {
 	return bestServer, nil
 }
 
-// GetServerCount returns the number of servers in the pool
 func (sp *ServerPool) GetServerCount() int {
 	sp.mu.RLock()
 	defer sp.mu.RUnlock()

@@ -2,6 +2,8 @@ package main
 
 import (
 	"math"
+	"net/url"
+	"strings"
 	"sync"
 	"time"
 )
@@ -15,6 +17,13 @@ const (
 	ErrorTypeClient
 )
 
+// LatencyPercentiles holds latency percentile values
+type LatencyPercentiles struct {
+	P50 time.Duration
+	P95 time.Duration
+	P99 time.Duration
+}
+
 type ServerMetrics struct {
 	ServerURL string
 	Score     float64
@@ -25,10 +34,12 @@ type ServerMetrics struct {
 	FailedRequests  int64
 
 	// Latency tracking
-	TotalLatency time.Duration
-	AvgLatency   time.Duration
-	MinLatency   time.Duration
-	MaxLatency   time.Duration
+	TotalLatency       time.Duration
+	AvgLatency         time.Duration
+	MinLatency         time.Duration
+	MaxLatency         time.Duration
+	LatencyTracker     *LatencyTracker
+	LatencyPercentiles LatencyPercentiles
 
 	// Error counts
 	GatewayErrors []ErrorEvent
@@ -81,17 +92,17 @@ func DefaultScoringConfig() *ScoringConfig {
 		LatencyThresholdLow:  100 * time.Millisecond,
 		LatencyThresholdMed:  500 * time.Millisecond,
 		LatencyThresholdHigh: 1000 * time.Millisecond,
-		LatencyPenaltyLow:    5.0,
-		LatencyPenaltyMed:    15.0,
-		LatencyPenaltyHigh:   30.0,
-		GatewayErrorPenalty:  10.0,
-		BankErrorPenalty:     5.0,
-		NetworkErrorPenalty:  15.0,
-		ClientErrorPenalty:   2.0,
+		LatencyPenaltyLow:    2.5,
+		LatencyPenaltyMed:    7.5,
+		LatencyPenaltyHigh:   15.0,
+		GatewayErrorPenalty:  5.0,
+		BankErrorPenalty:     2.5,
+		NetworkErrorPenalty:  7.5,
+		ClientErrorPenalty:   1.0,
 		HighLoadThreshold:    50,
-		LoadPenalty:          20.0,
+		LoadPenalty:          10.0,
 		ErrorDecayWindow:     5 * time.Minute,
-		RecoveryRate:         0.5,
+		RecoveryRate:         1.0,
 		MinScore:             0.0,
 		MaxScore:             100.0,
 		ScoreUpdatePeriod:    10 * time.Second,
@@ -100,14 +111,15 @@ func DefaultScoringConfig() *ScoringConfig {
 
 func NewServerMetrics(serverURL string) *ServerMetrics {
 	return &ServerMetrics{
-		ServerURL:     serverURL,
-		Score:         100.0,
-		MinLatency:    time.Duration(math.MaxInt64),
-		GatewayErrors: make([]ErrorEvent, 0),
-		BankErrors:    make([]ErrorEvent, 0),
-		NetworkErrors: make([]ErrorEvent, 0),
-		ClientErrors:  make([]ErrorEvent, 0),
-		LastUpdated:   time.Now(),
+		ServerURL:      serverURL,
+		Score:          100.0,
+		MinLatency:     time.Duration(math.MaxInt64),
+		LatencyTracker: NewLatencyTracker(1000), // Keep 1000 samples
+		GatewayErrors:  make([]ErrorEvent, 0),
+		BankErrors:     make([]ErrorEvent, 0),
+		NetworkErrors:  make([]ErrorEvent, 0),
+		ClientErrors:   make([]ErrorEvent, 0),
+		LastUpdated:    time.Now(),
 	}
 }
 
@@ -126,6 +138,12 @@ func (sm *ServerMetrics) RecordRequest(latency time.Duration, success bool) {
 
 	sm.TotalLatency += latency
 	sm.AvgLatency = time.Duration(int64(sm.TotalLatency) / sm.TotalRequests)
+
+	// Track latency for percentile calculation
+	if sm.LatencyTracker != nil {
+		sm.LatencyTracker.AddSample(latency)
+		sm.LatencyPercentiles = sm.LatencyTracker.GetPercentiles()
+	}
 
 	if latency < sm.MinLatency {
 		sm.MinLatency = latency
@@ -176,13 +194,21 @@ func (sm *ServerMetrics) GetMetricsSummary() map[string]interface{} {
 	if sm.TotalRequests > 0 {
 		successRate = float64(sm.SuccessRequests) / float64(sm.TotalRequests) * 100
 	}
-
+	u, _ := url.Parse(sm.ServerURL)
+	parts := strings.Split(strings.Trim(u.Path, "/"), "/")
+	lastSlug := parts[len(parts)-1]
 	return map[string]interface{}{
+		"name":               lastSlug,
 		"server_url":         sm.ServerURL,
 		"score":              sm.Score,
 		"total_requests":     sm.TotalRequests,
 		"success_rate":       successRate,
 		"avg_latency_ms":     sm.AvgLatency.Milliseconds(),
+		"p50_latency_ms":     sm.LatencyPercentiles.P50.Milliseconds(),
+		"p95_latency_ms":     sm.LatencyPercentiles.P95.Milliseconds(),
+		"p99_latency_ms":     sm.LatencyPercentiles.P99.Milliseconds(),
+		"min_latency_ms":     sm.MinLatency.Milliseconds(),
+		"max_latency_ms":     sm.MaxLatency.Milliseconds(),
 		"gateway_errors":     len(sm.GatewayErrors),
 		"bank_errors":        len(sm.BankErrors),
 		"network_errors":     len(sm.NetworkErrors),
