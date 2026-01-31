@@ -22,6 +22,29 @@
   line-height: 1.5;
 }
 
+.message,
+.messageError {
+  padding: 1rem;
+  border-radius: 8px;
+  margin: 0;
+}
+
+.message {
+  color: #555;
+  background: #f8f8f8;
+}
+
+.messageError {
+  color: #c5221f;
+  background: #fce8e6;
+}
+
+.empty {
+  text-align: center;
+  color: #666;
+  padding: 2rem !important;
+}
+
 .tableWrap {
   background: #fff;
   border-radius: 12px;

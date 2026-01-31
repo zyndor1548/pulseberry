@@ -1,3 +1,5 @@
 export const metricsUrls = {
-    metrics: () => "/api/metrics",
-  };  
+  metrics: () => "/api/metrics",
+};
+
+export const logsUrl = "/logs";  
