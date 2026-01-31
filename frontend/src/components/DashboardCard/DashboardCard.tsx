@@ -11,7 +11,6 @@ interface DashboardCardProps {
   index: number;
   enabled: boolean;
   onSetEnabled: (enabled: boolean) => void;
-  onReset?: () => void;
 }
 
 const DashboardCard: React.FC<DashboardCardProps> = ({
@@ -23,7 +22,6 @@ const DashboardCard: React.FC<DashboardCardProps> = ({
   index,
   enabled,
   onSetEnabled,
-  onReset,
 }) => {
   return (
     <motion.article
@@ -81,11 +79,6 @@ const DashboardCard: React.FC<DashboardCardProps> = ({
         >
           Off
         </button>
-        {onReset && (
-          <button type="button" className={styles.resetBtn} onClick={onReset} title="Reset circuit breaker">
-            Reset
-          </button>
-        )}
       </div>
     </motion.article>
   );

@@ -4,7 +4,7 @@ import DashboardCard from "../components/DashboardCard/DashboardCard";
 import MetricsChart, { type HistoryPoint } from "../components/MetricsChart/MetricsChart";
 import type { Provider } from "../types/provider";
 import { fetchServers } from "../api/servers";
-import { enableProvider, disableProvider, resetCircuitBreaker } from "../api/admin";
+import { enableProvider, disableProvider } from "../api/admin";
 import { serverToProvider, registryToProviders } from "../utils/serverToProvider";
 import styles from "./Home.module.css";
 
@@ -35,14 +35,6 @@ const Home: React.FC = () => {
       setStoreEnabled((prev) => ({ ...prev, [name]: enabled }));
     } catch (e) {
       alert(e instanceof Error ? e.message : "Request failed");
-    }
-  };
-
-  const handleReset = async (name: string) => {
-    try {
-      await resetCircuitBreaker(name);
-    } catch (e) {
-      alert(e instanceof Error ? e.message : "Reset failed");
     }
   };
 
@@ -86,7 +78,6 @@ const Home: React.FC = () => {
                 index={index}
                 enabled={enabledByStore(p.name)}
                 onSetEnabled={(enabled) => handleSetEnabled(p.name, enabled)}
-                onReset={() => handleReset(p.name)}
               />
             ))}
           </div>

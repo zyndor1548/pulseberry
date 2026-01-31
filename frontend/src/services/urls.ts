@@ -8,5 +8,4 @@ const admin = import.meta.env.DEV ? "/api/admin" : "/admin";
 export const adminUrls = {
   enable: (provider: string) => `${admin}/providers/enable?provider=${encodeURIComponent(provider)}`,
   disable: (provider: string) => `${admin}/providers/disable?provider=${encodeURIComponent(provider)}`,
-  resetCircuit: (provider: string) => `${admin}/circuit-breaker/reset?provider=${encodeURIComponent(provider)}`,
 };  
