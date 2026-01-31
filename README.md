@@ -14,6 +14,8 @@ Instead of integrating directly with provider-specific APIs, clients interact wi
 - Caching- Redis
 ### SCREENSHOTS
 <img width="1834" height="821" alt="image" src="https://github.com/user-attachments/assets/f956fbf1-5879-4708-9a87-6bee5139d610" />
+<img width="1838" height="924" alt="image" src="https://github.com/user-attachments/assets/342a51e3-8fee-4b98-985e-76387fc99ddd" />
+
 
 <img width="1841" height="839" alt="image" src="https://github.com/user-attachments/assets/582e592d-0dd1-4865-842a-8d7fdf790374" />
 
