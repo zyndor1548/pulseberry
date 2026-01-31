@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>BPAY - Register</title>
+    <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+    <div class="page-container">
+        <header class="hero-section">
+            <div class="logo-container">
+                <div class="logo-icon"></div>
+                <h1 class="logo-text">BPAY</h1>
+            </div>
+            <p class="tagline">Create your account</p>
+        </header>
+
+        <main class="glass-card">
+            <h2 class="form-title">Sign Up</h2>
+
+            <form id="signup-form" class="signup-form">
+                <!-- Username -->
+                <div class="input-group">
+                    <div class="input-wrapper">
+                        <input type="text" id="username" placeholder="Username" required autocomplete="off">
+                        <span class="input-icon user-icon"></span>
+                    </div>
+                </div>
+
+                <!-- Password -->
+                <div class="input-group">
+                    <div class="input-wrapper">
+                        <input type="password" id="password" maxlength="4" placeholder="Password" required autocomplete="new-password">
+                        <span class="input-icon lock-icon"></span>
+                    </div>
+                </div>
+
+                <!-- Confirm Password -->
+                <div class="input-group">
+                    <div class="input-wrapper">
+                        <input type="password" id="confirm-password" maxlength="4" placeholder="Confirm Password" required autocomplete="new-password">
+                        <span class="input-icon lock-icon"></span>
+                    </div>
+                </div>
+
+                <!-- Submit Button -->
+                <button type="submit" class="cta-button">
+                    <span class="btn-text">Create Account</span>
+                </button>
+
+                <div class="secondary-action">
+                    <p>Already have an account? <a href="login.html" class="login-link">Log in</a></p>
+                </div>
+            </form>
+        </main>
+    </div>
+
+    <script src="js/main.js"></script>
+</body>
+</html>

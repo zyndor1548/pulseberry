@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>BPAY - Login</title>
+    <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+    <div class="page-container">
+        <header class="hero-section">
+            <div class="logo-container">
+                <div class="logo-icon"></div>
+                <h1 class="logo-text">BPAY</h1>
+            </div>
+            <p class="tagline">Welcome back! Log in to continue.</p>
+        </header>
+
+        <main class="glass-card">
+            <h2 class="form-title">Log In</h2>
+
+            <form id="login-form" class="signup-form">
+                <div class="input-group">
+                    <div class="input-wrapper">
+                        <input type="text" id="login-username" placeholder="Username" required autocomplete="off">
+                        <span class="input-icon user-icon"></span>
+                    </div>
+                </div>
+
+                <div class="input-group">
+                    <div class="input-wrapper">
+                        <input type="password" id="login-password" placeholder="Password" required autocomplete="off">
+                        <span class="input-icon lock-icon"></span>
+                    </div>
+                </div>
+
+                <button type="submit" class="cta-button">
+                    <span class="btn-text">Log In</span>
+                </button>
+
+                <div class="secondary-action">
+                    <p>Don't have an account? <a href="register.html" class="login-link">Sign up</a></p>
+                </div>
+            </form>
+        </main>
+    </div>
+    <script src="js/main.js"></script>
+</body>
+</html>
