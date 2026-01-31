@@ -119,3 +119,18 @@
   background: #056827;
   border-color: #056827;
 }
+
+.resetBtn {
+  padding: 8px 12px;
+  font-size: 12px;
+  font-weight: 600;
+  border-radius: 10px;
+  border: 2px solid #e5e7eb;
+  background: #f9fafb;
+  color: #6b7280;
+  cursor: pointer;
+}
+
+.resetBtn:hover {
+  background: #f3f4f6;
+}

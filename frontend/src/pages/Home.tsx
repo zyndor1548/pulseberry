@@ -4,6 +4,7 @@ import DashboardCard from "../components/DashboardCard/DashboardCard";
 import MetricsChart, { type HistoryPoint } from "../components/MetricsChart/MetricsChart";
 import type { Provider } from "../types/provider";
 import { fetchServers } from "../api/servers";
+import { enableProvider, disableProvider, resetCircuitBreaker } from "../api/admin";
 import { serverToProvider } from "../utils/serverToProvider";
 import styles from "./Home.module.css";
 
@@ -24,8 +25,23 @@ const Home: React.FC = () => {
 
   const [storeEnabled, setStoreEnabled] = useState<Record<string, boolean>>({});
   const enabledByStore = (name: string) => storeEnabled[name] !== false;
-  const setStoreEnabledByName = (name: string, enabled: boolean) => {
-    setStoreEnabled((prev) => ({ ...prev, [name]: enabled }));
+
+  const handleSetEnabled = async (name: string, enabled: boolean) => {
+    try {
+      if (enabled) await enableProvider(name);
+      else await disableProvider(name);
+      setStoreEnabled((prev) => ({ ...prev, [name]: enabled }));
+    } catch (e) {
+      alert(e instanceof Error ? e.message : "Request failed");
+    }
+  };
+
+  const handleReset = async (name: string) => {
+    try {
+      await resetCircuitBreaker(name);
+    } catch (e) {
+      alert(e instanceof Error ? e.message : "Reset failed");
+    }
   };
 
   useEffect(() => {
@@ -65,7 +81,8 @@ const Home: React.FC = () => {
                 {...p}
                 index={index}
                 enabled={enabledByStore(p.name)}
-                onSetEnabled={(enabled) => setStoreEnabledByName(p.name, enabled)}
+                onSetEnabled={(enabled) => handleSetEnabled(p.name, enabled)}
+                onReset={() => handleReset(p.name)}
               />
             ))}
           </div>
