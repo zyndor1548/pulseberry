@@ -9,6 +9,8 @@ interface DashboardCardProps {
   latency: number | null;
   traffic: number;
   index: number;
+  enabled: boolean;
+  onSetEnabled: (enabled: boolean) => void;
 }
 
 const DashboardCard: React.FC<DashboardCardProps> = ({
@@ -18,10 +20,12 @@ const DashboardCard: React.FC<DashboardCardProps> = ({
   latency,
   traffic,
   index,
+  enabled,
+  onSetEnabled,
 }) => {
   return (
     <motion.article
-      className={`${styles.card} ${styles[status.toLowerCase()]}`}
+      className={`${styles.card} ${styles[status.toLowerCase()]} ${!enabled ? styles.off : ""}`}
       initial={{ y: 20, opacity: 0 }}
       animate={{ y: 0, opacity: 1 }}
       transition={{ duration: 0.4, delay: index * 0.1 }}
@@ -56,6 +60,25 @@ const DashboardCard: React.FC<DashboardCardProps> = ({
           <span className={styles.label}>Traffic</span>
           <span className={styles.value}>{traffic}/min</span>
         </div>
+      </div>
+
+      <div className={styles.actions} role="group" aria-label={`Turn ${name} on or off`}>
+        <button
+          type="button"
+          className={`${styles.toggleBtn} ${enabled ? styles.toggleBtnActive : ""}`}
+          onClick={() => onSetEnabled(true)}
+          aria-pressed={enabled}
+        >
+          On
+        </button>
+        <button
+          type="button"
+          className={`${styles.toggleBtn} ${!enabled ? styles.toggleBtnActive : ""}`}
+          onClick={() => onSetEnabled(false)}
+          aria-pressed={!enabled}
+        >
+          Off
+        </button>
       </div>
     </motion.article>
   );

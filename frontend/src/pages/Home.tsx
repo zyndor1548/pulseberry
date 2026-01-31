@@ -22,6 +22,12 @@ const Home: React.FC = () => {
   const [history, setHistory] = useState<HistoryPoint[]>([]);
   const lastTimestamp = useRef<string | null>(null);
 
+  const [storeEnabled, setStoreEnabled] = useState<Record<string, boolean>>({});
+  const enabledByStore = (name: string) => storeEnabled[name] !== false;
+  const setStoreEnabledByName = (name: string, enabled: boolean) => {
+    setStoreEnabled((prev) => ({ ...prev, [name]: enabled }));
+  };
+
   useEffect(() => {
     if (!data?.timestamp || !data?.servers?.length) return;
     if (lastTimestamp.current === data.timestamp) return;
@@ -54,7 +60,13 @@ const Home: React.FC = () => {
         <>
           <div className={styles.grid}>
             {sortedProviders.map((p, index) => (
-              <DashboardCard key={p.name} {...p} index={index} />
+              <DashboardCard
+                key={p.name}
+                {...p}
+                index={index}
+                enabled={enabledByStore(p.name)}
+                onSetEnabled={(enabled) => setStoreEnabledByName(p.name, enabled)}
+              />
             ))}
           </div>
           <section className={styles.chartSection} aria-label="Metrics over time">

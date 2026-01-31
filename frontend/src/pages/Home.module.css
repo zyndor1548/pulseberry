@@ -41,6 +41,10 @@
   padding-top: 0;
 }
 
+.message{
+  padding-left: 4rem;
+}
+
 @media (max-width: 1024px) {
   .wrapper {
     padding-left: 2rem;

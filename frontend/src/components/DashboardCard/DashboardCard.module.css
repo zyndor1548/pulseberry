@@ -78,3 +78,44 @@
 .down .statusDot {
   background: #ff4d4f;
 }
+
+.off {
+  opacity: 0.7;
+}
+
+.actions {
+  display: flex;
+  gap: 8px;
+  margin-top: 1rem;
+  padding-top: 1rem;
+  border-top: 1px solid rgba(0, 0, 0, 0.1);
+}
+
+.toggleBtn {
+  flex: 1;
+  padding: 8px 12px;
+  font-size: 13px;
+  font-weight: 600;
+  border-radius: 10px;
+  border: 2px solid #e5e7eb;
+  background: #f9fafb;
+  color: #6b7280;
+  cursor: pointer;
+  transition: background 0.2s, border-color 0.2s, color 0.2s;
+}
+
+.toggleBtn:hover {
+  background: #f3f4f6;
+  border-color: #d1d5db;
+}
+
+.toggleBtnActive {
+  background: #06782e;
+  border-color: #06782e;
+  color: #fff;
+}
+
+.toggleBtnActive:hover {
+  background: #056827;
+  border-color: #056827;
+}
